@@ -5,6 +5,7 @@ import Flags from 'react-world-flags';
 import Avatar from '../Avatar';
 import { COUNTRIES } from '../constants';
 import ModifyPlayer from './ModifyPlayer';
+import DeletePlayer from './DeletePlayer';
 
 const TableBody = ({ players }) => {
   return (
@@ -41,6 +42,7 @@ const TableBody = ({ players }) => {
                 <ModifyPlayer
                   player={{ id, name, country, winnings, imageUrl }}
                 />
+                <DeletePlayer playerId={id} />
               </div>
             </td>
           </tr>

@@ -1,5 +1,6 @@
 import {
   CREATE_PLAYER_SUCCESS,
+  DELETE_PLAYER_SUCCESS,
   FETCH_PLAYERS_SUCCESS,
   MODIFY_PLAYER_SUCCESS,
 } from './constants';
@@ -14,4 +15,8 @@ export function createPlayerSuccess(data) {
 
 export function modifyPlayerSuccess(data) {
   return { type: MODIFY_PLAYER_SUCCESS, payload: { data } };
+}
+
+export function deletePlayerSuccess(data) {
+  return { type: DELETE_PLAYER_SUCCESS, payload: { data } };
 }
