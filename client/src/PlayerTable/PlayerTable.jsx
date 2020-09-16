@@ -7,7 +7,7 @@ import './PlayerTable.scss';
 import TableHeader from './TableHeader';
 import TableBody from './TableBody';
 
-const getPlayers = (state) => state.playerIds.map((id) => state.players[id]);
+const getPlayers = (state) => Object.values(state.players);
 
 const PlayerTable = () => {
   const dispatch = useDispatch();
