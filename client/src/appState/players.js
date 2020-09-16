@@ -1,4 +1,4 @@
-import { FETCH_PLAYERS_SUCCESS } from './constants';
+import { CREATE_PLAYER_SUCCESS, FETCH_PLAYERS_SUCCESS } from './constants';
 
 function mergePlayers(state, { players }) {
   const newState = { ...state };
@@ -12,6 +12,8 @@ export default function players(state = {}, action) {
   switch (action.type) {
     case FETCH_PLAYERS_SUCCESS:
       return mergePlayers(state, action.payload.data);
+    case CREATE_PLAYER_SUCCESS:
+      return mergePlayers(state, { players: [action.payload.data] });
     default:
       return state;
   }
