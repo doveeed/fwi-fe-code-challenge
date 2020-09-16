@@ -4,6 +4,7 @@ import Flags from 'react-world-flags';
 
 import Avatar from '../Avatar';
 import { COUNTRIES } from '../constants';
+import ModifyPlayer from './ModifyPlayer';
 
 const TableBody = ({ players }) => {
   return (
@@ -33,6 +34,13 @@ const TableBody = ({ players }) => {
                   <Flags code={country} alt="" />
                 </Avatar>
                 {country}
+              </div>
+            </td>
+            <td role="gridcell" className="table__native">
+              <div className="edit player">
+                <ModifyPlayer
+                  player={{ id, name, country, winnings, imageUrl }}
+                />
               </div>
             </td>
           </tr>

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 
-import { createPlayerSuccess } from '../appState/actions';
+import { modifyPlayerSuccess } from '../appState/actions';
 import PlayerInfoDialog from './PlayerInfoDialog';
 
-const CreatePlayer = () => {
+const ModifyPlayer = ({ player }) => {
   const dispatch = useDispatch();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -17,11 +17,12 @@ const CreatePlayer = () => {
     setIsDialogOpen(false);
   };
 
-  const createPlayer = async (playerData) => {
+  const modifyPlayer = async (playerData) => {
     handleCloseDialog();
-    const response = await fetch('http://localhost:3001/players', {
-      method: 'POST',
-      body: JSON.stringify(playerData),
+    const { id, ...requestData } = playerData;
+    const response = await fetch(`http://localhost:3001/players/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(requestData),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ const CreatePlayer = () => {
 
     if (response.ok) {
       const data = await response.json();
-      dispatch(createPlayerSuccess(data));
+      dispatch(modifyPlayerSuccess(data));
     } else {
       // TODO handle error
     }
@@ -38,17 +39,17 @@ const CreatePlayer = () => {
 
   return (
     <>
-      <Button color="primary" onClick={handleOpenDialog} variant="contained">
-        New player
-      </Button>
+      <Button onClick={handleOpenDialog}>Modify</Button>
       <PlayerInfoDialog
         open={isDialogOpen}
         onClose={handleCloseDialog}
-        onSubmit={createPlayer}
-        submitText="Add"
+        onSubmit={modifyPlayer}
+        player={player}
+        title="Modify player"
+        submitText="Save"
       />
     </>
   );
 };
 
-export default CreatePlayer;
+export default ModifyPlayer;
