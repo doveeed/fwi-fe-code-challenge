@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,7 +10,10 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+
 import { COUNTRIES } from '../constants';
+import { getPlayerInfoDialog } from '../appState/selectors';
+import { closePlayerInfoDialog } from '../appState/actions';
 
 const sortEntriesAlphabeticallyAscending = (entry1, entry2) => {
   if (entry2[1] > entry1[1]) {
@@ -21,21 +25,31 @@ const sortEntriesAlphabeticallyAscending = (entry1, entry2) => {
   }
 };
 
-const PlayerInfoDialog = ({
-  open = false,
-  player,
-  onSubmit,
-  onClose,
-  submitText = 'Add',
-  title = 'New player',
-}) => {
-  const [country, setCountry] = useState(player ? player.country : '');
-  const [name, setName] = useState(player ? player.name : '');
-  const [winnings, setWinnings] = useState(player ? player.winnings : '');
-  const [imageUrl, setImageUrl] = useState(player ? player.imageUrl : '');
+const PlayerInfoDialog = () => {
+  const dispatch = useDispatch();
+  const { open, player, onSubmit, submitText, title } = useSelector(
+    getPlayerInfoDialog
+  );
+  const [name, setName] = useState('');
+  const [country, setCountry] = useState('');
+  const [winnings, setWinnings] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
-  const handleCloseDialog = (e) => {
-    onClose(e);
+  useEffect(() => {
+    if (player) {
+      setName(player.name);
+      setCountry(player.country);
+      setWinnings(player.winnings);
+      setImageUrl(player.imageUrl);
+    }
+  }, [player]);
+
+  const handleCloseDialog = () => {
+    dispatch(closePlayerInfoDialog());
+    setName('');
+    setCountry('');
+    setWinnings('');
+    setImageUrl('');
   };
 
   const handleNameChange = (e) => {
@@ -64,6 +78,7 @@ const PlayerInfoDialog = ({
     if (onSubmit) {
       onSubmit(Object.assign({}, player, playerData));
     }
+    dispatch(closePlayerInfoDialog());
   };
 
   return (

@@ -2,7 +2,7 @@
 
 .header {
   align-items: center;
-  background-color: $charcoal;
+  background-color: $sleeping-panther;
   box-shadow: 0 4px 5px 0 rgba($sleeping-panther, 0.14),
     0 1px 10px 0 rgba($sleeping-panther, 0.12),
     0 2px 4px -1px rgba($sleeping-panther, 0.4);
@@ -11,6 +11,7 @@
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 1;
 
   &__title {
     color: $snow;

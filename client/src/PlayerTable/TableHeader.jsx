@@ -1,5 +1,8 @@
 import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { Button } from '@material-ui/core';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 import { clearAllPlayers, updatePlayerTable } from '../appState/actions';
 import { getPlayerTable } from '../appState/selectors';
@@ -29,6 +32,9 @@ const TableHeader = () => {
     });
   };
 
+  const SortArrow =
+    sortOrder === SORT_ORDER_ASC ? ArrowUpwardIcon : ArrowDownwardIcon;
+
   return (
     <table
       id="player-table-header"
@@ -39,27 +45,42 @@ const TableHeader = () => {
         <tr role="row">
           <th role="columnheader" className="table__header table__avatar" />
           <th role="columnheader" className="table__header table__player">
-            <button onClick={() => sortPlayersBy(PLAYER_SORTABLE_FIELDS.name)}>
+            <Button
+              endIcon={
+                sortBy === PLAYER_SORTABLE_FIELDS.name ? (
+                  <SortArrow />
+                ) : undefined
+              }
+              onClick={() => sortPlayersBy(PLAYER_SORTABLE_FIELDS.name)}
+            >
               Player
-            </button>
+            </Button>
           </th>
           <th role="columnheader" className="table__header table__winnings">
-            <button
+            <Button
+              endIcon={
+                sortBy === PLAYER_SORTABLE_FIELDS.winnings ? (
+                  <SortArrow />
+                ) : undefined
+              }
               onClick={() => sortPlayersBy(PLAYER_SORTABLE_FIELDS.winnings)}
             >
               Winnings
-            </button>
+            </Button>
           </th>
           <th role="columnheader" className="table__header table__native">
-            <button
+            <Button
+              endIcon={
+                sortBy === PLAYER_SORTABLE_FIELDS.country ? (
+                  <SortArrow />
+                ) : undefined
+              }
               onClick={() => sortPlayersBy(PLAYER_SORTABLE_FIELDS.country)}
             >
               Native of
-            </button>
+            </Button>
           </th>
-          <th role="columnheader" className="table__header table__native">
-            Actions
-          </th>
+          <th role="columnheader" className="table__header table__actions"></th>
         </tr>
       </thead>
     </table>

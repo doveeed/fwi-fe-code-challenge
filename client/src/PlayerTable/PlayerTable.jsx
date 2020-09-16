@@ -5,11 +5,15 @@ import { fetchPlayersSuccess } from '../appState/actions';
 import { getPlayers, getPlayerTable } from '../appState/selectors';
 import TableHeader from './TableHeader';
 import TableBody from './TableBody';
+import DeletePlayerDialog from './DeletePlayerDialog';
+import PlayerInfoDialog from './PlayerInfoDialog';
 import './PlayerTable.scss';
 
 const PlayerTable = () => {
   const dispatch = useDispatch();
-  const { sortBy, sortOrder, from, size } = useSelector(getPlayerTable);
+  const { sortBy, sortOrder, from, size, timestamp } = useSelector(
+    getPlayerTable
+  );
 
   useEffect(() => {
     (async function fetchPlayers() {
@@ -25,7 +29,7 @@ const PlayerTable = () => {
       const json = await response.json();
       dispatch(fetchPlayersSuccess(json));
     })();
-  }, [dispatch, sortBy, sortOrder, from, size]);
+  }, [dispatch, sortBy, sortOrder, from, size, timestamp]);
 
   const players = useSelector(getPlayers);
 
@@ -38,6 +42,8 @@ const PlayerTable = () => {
     >
       <TableHeader />
       <TableBody players={players} />
+      <PlayerInfoDialog />
+      <DeletePlayerDialog />
     </div>
   );
 };

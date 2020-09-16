@@ -23,6 +23,9 @@ $header-height: 2.5rem;
 
   &--body {
     background-color: $snow;
+    &__player {
+      padding-left: 0.5rem;
+    }
   }
 
   &__row {
@@ -39,6 +42,7 @@ $header-height: 2.5rem;
   }
 
   &__header {
+    background-color: $palisade;
     letter-spacing: 0.00937em;
     line-height: 1.75rem;
     font-size: 1rem;
@@ -60,11 +64,22 @@ $header-height: 2.5rem;
   &__winnings {
     padding-right: 1.5rem;
     text-align: right;
-    width: 8rem;
+    width: 12rem;
+    &.table--body__winnings {
+      padding-right: 2rem;
+    }
   }
 
   &__native {
-    width: 6rem;
+    padding-left: 0.5rem;
+    width: 8rem;
+    &.table--body__native {
+      padding-left: 1rem;
+    }
+  }
+
+  &__actions {
+    width: 4rem;
   }
 }
 

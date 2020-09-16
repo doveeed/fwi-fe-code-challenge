@@ -8,8 +8,7 @@ import Avatar from '../Avatar';
 import { COUNTRIES } from '../constants';
 import { updatePlayerTable } from '../appState/actions';
 import { getPlayerTable } from '../appState/selectors';
-import ModifyPlayer from './ModifyPlayer';
-import DeletePlayer from './DeletePlayer';
+import TableRow from './TableRow';
 
 const TableBody = ({ players }) => {
   const dispatch = useDispatch();
@@ -24,7 +23,7 @@ const TableBody = ({ players }) => {
       dataLength={players.length}
       next={fetchMorePlayers}
       hasMore={!total || from < total}
-      loader={<h4 style={{ textAlign: 'center' }}>Loading...</h4>}
+      loader={<h4 style={{ textAlign: 'center' }}>Loading more players...</h4>}
     >
       <table
         id="player-table-body"
@@ -32,37 +31,8 @@ const TableBody = ({ players }) => {
         className="table table--body"
       >
         <tbody>
-          {players.map(({ id, name, country, winnings, imageUrl }) => (
-            <tr key={id} role="row" className="table__row">
-              <td role="gridcell" className="table__avatar">
-                <Avatar src={imageUrl} />
-              </td>
-              <td role="gridcell" className="table__player">
-                {name}
-              </td>
-              <td role="gridcell" className="table__winnings">
-                {winnings.toLocaleString(undefined, {
-                  style: 'currency',
-                  currency: 'USD',
-                })}
-              </td>
-              <td role="gridcell" className="table__native">
-                <div className="country">
-                  <Avatar>
-                    <Flags code={country} alt="" />
-                  </Avatar>
-                  {country}
-                </div>
-              </td>
-              <td role="gridcell" className="table__native">
-                <div className="edit player">
-                  <ModifyPlayer
-                    player={{ id, name, country, winnings, imageUrl }}
-                  />
-                  <DeletePlayer playerId={id} />
-                </div>
-              </td>
-            </tr>
+          {players.map((player) => (
+            <TableRow key={player.id} player={player} />
           ))}
           {total === 0 && <div>No players added, yet!</div>}
         </tbody>

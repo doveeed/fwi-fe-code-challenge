@@ -6,6 +6,7 @@ const defaultTableState = {
   from: 0,
   size: 25,
   total: undefined,
+  timestamp: Date.now(),
 };
 
 export default function playerTable(state = defaultTableState, action) {
