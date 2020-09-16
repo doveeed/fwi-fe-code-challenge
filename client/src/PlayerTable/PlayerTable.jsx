@@ -2,27 +2,30 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchPlayersSuccess } from '../appState/actions';
-
-import './PlayerTable.scss';
+import { getPlayers, getPlayerTable } from '../appState/selectors';
 import TableHeader from './TableHeader';
 import TableBody from './TableBody';
-
-const getPlayers = (state) => Object.values(state.players);
+import './PlayerTable.scss';
 
 const PlayerTable = () => {
   const dispatch = useDispatch();
+  const { sortBy, sortOrder, from, size } = useSelector(getPlayerTable);
+
   useEffect(() => {
     (async function fetchPlayers() {
-      const response = await fetch('http://localhost:3001/players', {
-        headers: {
-          Accept: 'application/json',
-        },
-      });
+      const response = await fetch(
+        `http://localhost:3001/players?sortBy=${sortBy}&sortOrder=${sortOrder}&from=${from}&size=${size}`,
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        }
+      );
 
       const json = await response.json();
       dispatch(fetchPlayersSuccess(json));
     })();
-  }, [dispatch]);
+  }, [dispatch, sortBy, sortOrder, from, size]);
 
   const players = useSelector(getPlayers);
 

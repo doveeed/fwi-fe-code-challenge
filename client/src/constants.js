@@ -1,3 +1,11 @@
+export const PLAYER_SORTABLE_FIELDS = {
+  name: 'name',
+  country: 'country',
+  winnings: 'winnings',
+};
+export const SORT_ORDER_ASC = 'asc';
+export const SORT_ORDER_DESC = 'desc';
+
 export const COUNTRIES = {
   BD: 'Bangladesh',
   BE: 'Belgium',
