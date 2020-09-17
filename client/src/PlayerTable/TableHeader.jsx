@@ -46,6 +46,7 @@ const TableHeader = () => {
           <th role="columnheader" className="table__header table__avatar" />
           <th role="columnheader" className="table__header table__player">
             <Button
+              aria-label="Sort by Player"
               endIcon={
                 sortBy === PLAYER_SORTABLE_FIELDS.name ? (
                   <SortArrow />
@@ -58,6 +59,7 @@ const TableHeader = () => {
           </th>
           <th role="columnheader" className="table__header table__winnings">
             <Button
+              aria-label="Sorty by Winnigs"
               endIcon={
                 sortBy === PLAYER_SORTABLE_FIELDS.winnings ? (
                   <SortArrow />
@@ -70,6 +72,7 @@ const TableHeader = () => {
           </th>
           <th role="columnheader" className="table__header table__native">
             <Button
+              aria-label="Sort by Native of"
               endIcon={
                 sortBy === PLAYER_SORTABLE_FIELDS.country ? (
                   <SortArrow />

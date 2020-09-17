@@ -7,6 +7,8 @@ import {
   CLOSE_PLAYER_INFO_DIALOG,
   CLOSE_DELETE_PLAYER_DIALOG,
   OPEN_DELETE_PLAYER_DIALOG,
+  SHOW_ALERT,
+  HIDE_ALERT,
 } from './constants';
 
 // players
@@ -43,4 +45,21 @@ export function openDeletePlayerDialog(data) {
 
 export function closeDeletePlayerDialog() {
   return { type: CLOSE_DELETE_PLAYER_DIALOG };
+}
+
+// alerts
+export function showAlert(data) {
+  return {
+    type: SHOW_ALERT,
+    payload: {
+      data: {
+        ...data,
+        id: Date.now(),
+      },
+    },
+  };
+}
+
+export function hideAlert(data) {
+  return { type: HIDE_ALERT, payload: { data } };
 }

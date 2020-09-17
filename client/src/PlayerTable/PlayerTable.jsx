@@ -7,6 +7,7 @@ import TableHeader from './TableHeader';
 import TableBody from './TableBody';
 import DeletePlayerDialog from './DeletePlayerDialog';
 import PlayerInfoDialog from './PlayerInfoDialog';
+import Alerts from './Alerts';
 import './PlayerTable.scss';
 
 const PlayerTable = () => {
@@ -44,6 +45,7 @@ const PlayerTable = () => {
       <TableBody players={players} />
       <PlayerInfoDialog />
       <DeletePlayerDialog />
+      <Alerts />
     </div>
   );
 };

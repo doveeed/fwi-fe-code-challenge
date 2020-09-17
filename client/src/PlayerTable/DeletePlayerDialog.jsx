@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,6 +12,7 @@ import {
   closeDeletePlayerDialog,
   clearAllPlayers,
   updatePlayerTable,
+  showAlert,
 } from '../appState/actions';
 import themeAlert from '../themeAlert';
 import { getDeletePlayerDialog } from '../appState/selectors';
@@ -35,10 +36,16 @@ const DeletePlayerDialog = () => {
     });
 
     if (response.ok) {
+      batch(() => {});
       dispatch(clearAllPlayers());
       dispatch(updatePlayerTable({ from: 0, size: 25, timestamp: Date.now() }));
+      dispatch(
+        showAlert({ type: 'success', message: 'Success! Player deleted' })
+      );
     } else {
-      // TODO handle error
+      dispatch(
+        showAlert({ type: 'error', message: 'Error! Could not delete player' })
+      );
     }
   };
 
@@ -57,11 +64,13 @@ const DeletePlayerDialog = () => {
       </DialogContent>
       <DialogActions>
         <ThemeProvider theme={themeAlert}>
-          <Button onClick={deletePlayer} color="primary">
+          <Button onClick={deletePlayer} color="primary" aria-label="Delete">
             Delete
           </Button>
         </ThemeProvider>
-        <Button onClick={handleCloseDialog}>Cancel</Button>
+        <Button onClick={handleCloseDialog} aria-label="Cancel">
+          Cancel
+        </Button>
       </DialogActions>
     </Dialog>
   );

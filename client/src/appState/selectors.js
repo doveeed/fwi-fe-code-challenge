@@ -9,3 +9,6 @@ export const getPlayerInfoDialog = (state) => state.playerInfoDialog;
 
 // playerInfoDialog
 export const getDeletePlayerDialog = (state) => state.deletePlayerDialog;
+
+// alerts
+export const getAlerts = (state) => state.alerts;

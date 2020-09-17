@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -25,86 +26,217 @@ const sortEntriesAlphabeticallyAscending = (entry1, entry2) => {
   }
 };
 
+const defaultValidation = {
+  name: null,
+  country: null,
+  winnings: null,
+  imageUrl: null,
+};
+
 const PlayerInfoDialog = () => {
   const dispatch = useDispatch();
   const { open, player, onSubmit, submitText, title } = useSelector(
     getPlayerInfoDialog
   );
-  const [name, setName] = useState('');
-  const [country, setCountry] = useState('');
-  const [winnings, setWinnings] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [playerInput, setPlayerInput] = useState({
+    name: '',
+    country: '',
+    winnings: '',
+    imageUrl: '',
+  });
+  const [playerValidation, setPlayerValidation] = useState({
+    ...defaultValidation,
+  });
 
   useEffect(() => {
     if (player) {
-      setName(player.name);
-      setCountry(player.country);
-      setWinnings(player.winnings);
-      setImageUrl(player.imageUrl);
+      setPlayerInput({
+        name: player.name || '',
+        country: player.country || '',
+        winnings: player.winnings || '',
+        imageUrl: player.imageUrl || '',
+      });
     }
   }, [player]);
 
   const handleCloseDialog = () => {
     dispatch(closePlayerInfoDialog());
-    setName('');
-    setCountry('');
-    setWinnings('');
-    setImageUrl('');
+    setPlayerInput({
+      name: '',
+      country: '',
+      winnings: '',
+      imageUrl: '',
+    });
+    setPlayerValidation({ ...defaultValidation });
+  };
+
+  const handleValidate = (key = undefined, newValue = undefined) => {
+    const newValidation = key
+      ? {
+          ...playerValidation,
+          [key]: validateKey(key, newValue),
+        }
+      : {
+          name: validateKey('name', playerInput.name),
+          country: validateKey('country', playerInput.country),
+          winnings: validateKey('winnings', playerInput.winnings),
+          imageUrl: validateKey('imageUrl', playerInput.imageUrl),
+        };
+    setPlayerValidation(newValidation);
+    let isValid = true;
+    Object.values(newValidation).forEach((val) => {
+      if (val > 0) {
+        isValid = false;
+      }
+    });
+    return isValid;
+  };
+
+  const validateKey = (key, newValue) => {
+    switch (key) {
+      case 'name':
+      case 'country':
+        return !newValue || newValue.length === 0 ? 1 : null;
+      case 'winnings':
+        return typeof newValue === 'string' || isNaN(newValue) ? 1 : null;
+      case 'imageUrl':
+        if (!player) {
+          return null;
+        } else if (player && (!newValue || newValue.length === 0)) {
+          return 1;
+        } else if (player && !RegExp('^https?://.*').test(newValue)) {
+          return 2;
+        } else {
+          return null;
+        }
+      default:
+        return null;
+    }
   };
 
   const handleNameChange = (e) => {
-    setName(e.target.value);
+    const key = 'name';
+    const newValue = e.target.value;
+    setPlayerInput({
+      ...playerInput,
+      [key]: newValue,
+    });
+
+    if (!validateKey(key, newValue)) {
+      setPlayerValidation({
+        ...playerValidation,
+        [key]: null,
+      });
+    }
   };
+
+  const handleNameBlur = () => {
+    handleValidate('name', playerInput.name);
+  };
+
   const handleCountryChange = (e) => {
-    setCountry(e.target.value);
+    const key = 'country';
+    const newValue = e.target.value;
+    setPlayerInput({
+      ...playerInput,
+      [key]: newValue,
+    });
+
+    if (!validateKey(key, newValue)) {
+      setPlayerValidation({
+        ...playerValidation,
+        [key]: null,
+      });
+    }
+  };
+
+  const handleCountryBlur = () => {
+    handleValidate('country', playerInput.country);
   };
 
   const handleWinningsChange = (e) => {
-    setWinnings(parseFloat(e.target.value));
+    const key = 'winnings';
+    const parsedValue = parseFloat(e.target.value);
+    const newValue = isNaN(parsedValue) ? '' : parsedValue;
+    setPlayerInput({
+      ...playerInput,
+      [key]: newValue,
+    });
+
+    if (!validateKey(key, newValue)) {
+      setPlayerValidation({
+        ...playerValidation,
+        [key]: null,
+      });
+    }
+  };
+
+  const handleWinningsBlur = () => {
+    handleValidate('winnings', playerInput.winnings);
   };
 
   const handleImageUrlChange = (e) => {
-    setImageUrl(e.target.value);
+    const key = 'imageUrl';
+    const newValue = e.target.value;
+    setPlayerInput({
+      ...playerInput,
+      [key]: newValue,
+    });
+
+    if (!validateKey(key, newValue)) {
+      setPlayerValidation({
+        ...playerValidation,
+        [key]: null,
+      });
+    }
+  };
+
+  const handleImageUrlBlur = () => {
+    handleValidate('imageUrl', playerInput.imageUrl);
   };
 
   const handleSubmit = () => {
-    const playerData = {
-      name,
-      country,
-      winnings,
-      imageUrl,
-    };
+    const isValid = handleValidate(undefined);
+    if (isValid) {
+      const playerData = {
+        ...playerInput,
+      };
 
-    if (onSubmit) {
-      onSubmit(Object.assign({}, player, playerData));
+      if (onSubmit) {
+        onSubmit(Object.assign({}, player, playerData));
+      }
+      handleCloseDialog();
     }
-    dispatch(closePlayerInfoDialog());
   };
 
   return (
     <Dialog
+      fullScreen
       open={open}
       onClose={handleCloseDialog}
-      aria-labelledby="form-dialog-title"
+      aria-labelledby="player-info-dialog-title"
     >
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle id="player-info-dialog-title">{title}</DialogTitle>
       <DialogContent>
         <TextField
-          autoFocus
           fullWidth
           id="player-name"
           label="Name"
           onChange={handleNameChange}
-          value={name}
+          onBlur={handleNameBlur}
+          value={playerInput.name}
+          error={playerValidation.name}
+          helperText={playerValidation.name ? 'Name is required' : null}
         />
-        <FormControl fullWidth>
+        <FormControl fullWidth error={playerValidation.country}>
           <InputLabel id="player-country-label">Country</InputLabel>
           <Select
             fullWidth
             id="player-country"
             labelId="player-country-label"
             onChange={handleCountryChange}
-            value={country}
+            onBlur={handleCountryBlur}
+            value={playerInput.country}
           >
             {Object.entries(COUNTRIES)
               .sort(sortEntriesAlphabeticallyAscending)
@@ -114,26 +246,51 @@ const PlayerInfoDialog = () => {
                 </MenuItem>
               ))}
           </Select>
+          {playerValidation.country && (
+            <FormHelperText>Country is required</FormHelperText>
+          )}
         </FormControl>
         <TextField
           id="standard-number"
           label="Winnings"
           type="number"
           onChange={handleWinningsChange}
-          value={winnings}
+          onBlur={handleWinningsBlur}
+          value={playerInput.winnings}
+          error={playerValidation.winnings}
+          helperText={playerValidation.winnings ? 'Winnings is required' : null}
           fullWidth
         />
         <TextField
           id="standard-number"
           label="Image URL"
           onChange={handleImageUrlChange}
-          value={imageUrl}
+          onBlur={handleImageUrlBlur}
+          value={playerInput.imageUrl}
+          error={playerValidation.imageUrl}
+          helperText={
+            playerValidation.imageUrl === 1
+              ? 'Image URL is required'
+              : playerValidation.imageUrl === 2
+              ? 'Image URL must start with http:// or https://'
+              : null
+          }
           fullWidth
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseDialog}>Cancel</Button>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={handleCloseDialog} aria-label="Cancel">
+          Cancel
+        </Button>
+        <Button
+          aria-label={submitText}
+          onClick={handleSubmit}
+          color="primary"
+          disabled={Object.values(playerValidation).reduce(
+            (bool, val) => (val > 0 ? true : bool),
+            false
+          )}
+        >
           {submitText}
         </Button>
       </DialogActions>

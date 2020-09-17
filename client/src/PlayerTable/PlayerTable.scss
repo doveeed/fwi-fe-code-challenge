@@ -25,6 +25,9 @@ $header-height: 2.5rem;
     background-color: $snow;
     &__player {
       padding-left: 0.5rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
@@ -34,15 +37,19 @@ $header-height: 2.5rem;
 
     &:hover {
       background-color: $pearl;
+      .actions {
+        .MuiIconButton-root {
+          opacity: 1;
+        }
+      }
     }
 
-    &:not(:last-child) {
-      border-bottom: 1px solid $pearl;
-    }
+    // &:not(:last-child) {
+    //   border-bottom: 1px solid $pearl;
+    // }
   }
 
   &__header {
-    background-color: $palisade;
     letter-spacing: 0.00937em;
     line-height: 1.75rem;
     font-size: 1rem;
@@ -64,8 +71,9 @@ $header-height: 2.5rem;
   &__winnings {
     padding-right: 1.5rem;
     text-align: right;
-    width: 12rem;
+    width: 10rem;
     &.table--body__winnings {
+      color: $moss;
       padding-right: 2rem;
     }
   }
@@ -79,6 +87,7 @@ $header-height: 2.5rem;
   }
 
   &__actions {
+    // padding-left: 6rem;
     width: 4rem;
   }
 }
@@ -90,5 +99,14 @@ $header-height: 2.5rem;
 
   .avatar {
     margin-right: 0.5rem;
+  }
+}
+
+.actions {
+  .MuiIconButton-root {
+    opacity: 0;
+    &:focus {
+      opacity: 1;
+    }
   }
 }

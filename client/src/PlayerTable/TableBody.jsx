@@ -1,10 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import Flags from 'react-world-flags';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Avatar from '../Avatar';
 import { COUNTRIES } from '../constants';
 import { updatePlayerTable } from '../appState/actions';
 import { getPlayerTable } from '../appState/selectors';
@@ -19,25 +17,28 @@ const TableBody = ({ players }) => {
   };
 
   return (
-    <InfiniteScroll
-      dataLength={players.length}
-      next={fetchMorePlayers}
-      hasMore={!total || from < total}
-      loader={<h4 style={{ textAlign: 'center' }}>Loading more players...</h4>}
-    >
-      <table
-        id="player-table-body"
-        role="presentation"
-        className="table table--body"
+    <>
+      <InfiniteScroll
+        dataLength={players.length}
+        next={fetchMorePlayers}
+        hasMore={!total || from < total}
+        loader={<h4 style={{ textAlign: 'center' }}>Loading players...</h4>}
       >
-        <tbody>
-          {players.map((player) => (
-            <TableRow key={player.id} player={player} />
-          ))}
-          {total === 0 && <div>No players added, yet!</div>}
-        </tbody>
-      </table>
-    </InfiniteScroll>
+        <table
+          id="player-table-body"
+          role="presentation"
+          className="table table--body"
+        >
+          <tbody>
+            {players.map((player) => (
+              <TableRow key={player.id} player={player} />
+            ))}
+            {total === 0 && <div>No players added, yet!</div>}
+          </tbody>
+        </table>
+      </InfiniteScroll>
+      <div style={{ display: 'flex', height: '4rem' }}></div>
+    </>
   );
 };
 

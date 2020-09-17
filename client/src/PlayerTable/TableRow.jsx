@@ -1,11 +1,12 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { batch, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Flags from 'react-world-flags';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import Avatar from '../Avatar';
 import { COUNTRIES } from '../constants';
@@ -13,6 +14,7 @@ import {
   openPlayerInfoDialog,
   modifyPlayerSuccess,
   openDeletePlayerDialog,
+  showAlert,
 } from '../appState/actions';
 
 const TableRow = ({ player }) => {
@@ -42,9 +44,19 @@ const TableRow = ({ player }) => {
 
     if (response.ok) {
       const data = await response.json();
-      dispatch(modifyPlayerSuccess(data));
+      batch(() => {
+        dispatch(modifyPlayerSuccess(data));
+        dispatch(
+          showAlert({
+            type: 'success',
+            message: `Success! Modified player ${data.name}`,
+          })
+        );
+      });
     } else {
-      // TODO handle error
+      dispatch(
+        showAlert({ type: 'error', message: 'Error! Failed to modify player' })
+      );
     }
   };
 
@@ -89,13 +101,15 @@ const TableRow = ({ player }) => {
       </td>
       <td role="gridcell" className="table__actions">
         <div className="actions">
-          <IconButton
-            aria-label="open player options"
-            size="small"
-            onClick={handleClick}
-          >
-            <MoreHorizIcon fontSize="inherit" />
-          </IconButton>
+          <Tooltip title="Actions">
+            <IconButton
+              aria-label="open player options"
+              size="small"
+              onClick={handleClick}
+            >
+              <MoreHorizIcon fontSize="inherit" />
+            </IconButton>
+          </Tooltip>
           <Menu
             id="simple-menu"
             anchorEl={anchorEl}
@@ -106,10 +120,6 @@ const TableRow = ({ player }) => {
             <MenuItem onClick={handleModifyClick}>Modify</MenuItem>
             <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
           </Menu>
-          {/* <ModifyPlayer
-            player={{ id, name, country, winnings, imageUrl }}
-            />
-            <DeletePlayer playerId={id} /> */}
         </div>
       </td>
     </tr>

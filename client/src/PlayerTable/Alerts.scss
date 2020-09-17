@@ -1,0 +1,17 @@
+.alert {
+  &__success {
+    .MuiSnackbarContent-root {
+      background-color: #4caf50;
+    }
+  }
+  &__error {
+    .MuiSnackbarContent-root {
+      background-color: #f44336;
+    }
+  }
+  &__warning {
+    .MuiSnackbarContent-root {
+      background-color: #ff9800;
+    }
+  }
+}

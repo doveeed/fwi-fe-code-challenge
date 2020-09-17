@@ -1,10 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import Button from '@material-ui/core/Button';
+import { batch, useDispatch } from 'react-redux';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 
 import {
   clearAllPlayers,
   openPlayerInfoDialog,
+  showAlert,
   updatePlayerTable,
 } from '../appState/actions';
 import './CreatePlayer.scss';
@@ -33,23 +36,40 @@ const CreatePlayer = () => {
     });
 
     if (response.ok) {
-      dispatch(clearAllPlayers());
-      dispatch(updatePlayerTable({ from: 0, size: 25, timestamp: Date.now() }));
+      batch(() => {
+        dispatch(clearAllPlayers());
+        dispatch(
+          updatePlayerTable({ from: 0, size: 25, timestamp: Date.now() })
+        );
+        dispatch(
+          showAlert({
+            type: 'success',
+            message: `Success! Created player ${playerData.name}`,
+          })
+        );
+      });
     } else {
-      // TODO handle error
+      dispatch(
+        showAlert({
+          type: 'error',
+          message: `Error! Failed to create player ${playerData.name}`,
+        })
+      );
     }
   };
 
   return (
     <>
-      <Button
-        className="create-player-button"
-        color="primary"
-        onClick={handleOpenDialog}
-        variant="contained"
-      >
-        New player
-      </Button>
+      <Tooltip title="Add player" placement="top">
+        <IconButton
+          aria-label="New player"
+          className="create-player-button"
+          onClick={handleOpenDialog}
+          size="medium"
+        >
+          <AddIcon fontSize="inherit" />
+        </IconButton>
+      </Tooltip>
     </>
   );
 };

@@ -12,11 +12,6 @@ function mergePlayers(state, { players }) {
   return newState;
 }
 
-function removePlayer(state, playerId) {
-  const { [playerId]: removedPlayer, ...newState } = state;
-  return newState;
-}
-
 export default function players(state = {}, action) {
   switch (action.type) {
     case FETCH_PLAYERS_SUCCESS:
