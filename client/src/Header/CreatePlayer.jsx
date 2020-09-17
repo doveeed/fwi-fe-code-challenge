@@ -2,6 +2,7 @@ import React from 'react';
 import { batch, useDispatch } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
 import {
@@ -60,10 +61,18 @@ const CreatePlayer = () => {
 
   return (
     <>
+      <Button
+        aria-label="New player"
+        className="create-player-button button-relative"
+        onClick={handleOpenDialog}
+        size="medium"
+      >
+        New player
+      </Button>
       <Tooltip title="Add player" placement="top">
         <IconButton
           aria-label="New player"
-          className="create-player-button"
+          className="create-player-button button-fixed"
           onClick={handleOpenDialog}
           size="medium"
         >
