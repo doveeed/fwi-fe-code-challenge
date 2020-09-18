@@ -13,9 +13,9 @@ import {
   clearAllPlayers,
   updatePlayerTable,
   showAlert,
-} from '../appState/actions';
-import themeAlert from '../themeAlert';
-import { getDeletePlayerDialog } from '../appState/selectors';
+} from '../../appState/actions';
+import themeAlert from '../../themeAlert';
+import { getDeletePlayerDialog } from '../../appState/selectors';
 
 const DeletePlayerDialog = () => {
   const dispatch = useDispatch();
@@ -54,6 +54,7 @@ const DeletePlayerDialog = () => {
       open={open}
       onClose={handleCloseDialog}
       aria-labelledby="form-dialog-title"
+      data-testid="delete-player-dialog"
     >
       <DialogTitle id="form-dialog-title">Delete player</DialogTitle>
       <DialogContent>
@@ -64,11 +65,20 @@ const DeletePlayerDialog = () => {
       </DialogContent>
       <DialogActions>
         <ThemeProvider theme={themeAlert}>
-          <Button onClick={deletePlayer} color="primary" aria-label="Delete">
+          <Button
+            onClick={deletePlayer}
+            color="primary"
+            aria-label="Delete"
+            data-testid="delete-player-submit-button"
+          >
             Delete
           </Button>
         </ThemeProvider>
-        <Button onClick={handleCloseDialog} aria-label="Cancel">
+        <Button
+          onClick={handleCloseDialog}
+          aria-label="Cancel"
+          data-testid="delete-player-cancel-button"
+        >
           Cancel
         </Button>
       </DialogActions>

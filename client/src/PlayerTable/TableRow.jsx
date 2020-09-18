@@ -106,6 +106,7 @@ const TableRow = ({ player }) => {
               aria-label="open player options"
               size="small"
               onClick={handleClick}
+              data-testid="menu-player"
             >
               <MoreHorizIcon fontSize="inherit" />
             </IconButton>
@@ -117,8 +118,18 @@ const TableRow = ({ player }) => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleModifyClick}>Modify</MenuItem>
-            <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+            <MenuItem
+              onClick={handleModifyClick}
+              data-testid="menu-modify-player"
+            >
+              Modify
+            </MenuItem>
+            <MenuItem
+              onClick={handleDeleteClick}
+              data-testid="menu-delete-player"
+            >
+              Delete
+            </MenuItem>
           </Menu>
         </div>
       </td>

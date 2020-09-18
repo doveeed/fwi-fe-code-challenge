@@ -40,6 +40,7 @@ const PlayerTable = () => {
       role="grid"
       aria-label="Poker Players"
       className="player-table"
+      data-testid="player-table"
     >
       <TableHeader />
       <TableBody players={players} />

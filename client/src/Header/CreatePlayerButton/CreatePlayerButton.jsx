@@ -10,10 +10,10 @@ import {
   openPlayerInfoDialog,
   showAlert,
   updatePlayerTable,
-} from '../appState/actions';
-import './CreatePlayer.scss';
+} from '../../appState/actions';
+import './CreatePlayerButton.scss';
 
-const CreatePlayer = () => {
+const CreatePlayerButton = () => {
   const dispatch = useDispatch();
 
   const handleOpenDialog = () => {
@@ -66,6 +66,7 @@ const CreatePlayer = () => {
         className="create-player-button button-relative"
         onClick={handleOpenDialog}
         size="medium"
+        data-testid="create-player-button-relative"
       >
         New player
       </Button>
@@ -75,6 +76,7 @@ const CreatePlayer = () => {
           className="create-player-button button-fixed"
           onClick={handleOpenDialog}
           size="medium"
+          data-testid="create-player-button-fixed"
         >
           <AddIcon fontSize="inherit" />
         </IconButton>
@@ -83,4 +85,4 @@ const CreatePlayer = () => {
   );
 };
 
-export default CreatePlayer;
+export default CreatePlayerButton;

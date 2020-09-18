@@ -12,9 +12,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { COUNTRIES } from '../constants';
-import { getPlayerInfoDialog } from '../appState/selectors';
-import { closePlayerInfoDialog } from '../appState/actions';
+import { COUNTRIES } from '../../constants';
+import { getPlayerInfoDialog } from '../../appState/selectors';
+import { closePlayerInfoDialog } from '../../appState/actions';
 
 const sortEntriesAlphabeticallyAscending = (entry1, entry2) => {
   if (entry2[1] > entry1[1]) {
@@ -100,11 +100,13 @@ const PlayerInfoDialog = () => {
       case 'winnings':
         return typeof newValue === 'string' || isNaN(newValue) ? 1 : null;
       case 'imageUrl':
-        if (!player) {
-          return null;
-        } else if (player && (!newValue || newValue.length === 0)) {
+        if (player && (!newValue || newValue.length === 0)) {
           return 1;
-        } else if (player && !RegExp('^https?://.*').test(newValue)) {
+        } else if (
+          newValue &&
+          newValue.length > 0 &&
+          !RegExp('^https?://.*').test(newValue)
+        ) {
           return 2;
         } else {
           return null;
@@ -215,6 +217,7 @@ const PlayerInfoDialog = () => {
       open={open}
       onClose={handleCloseDialog}
       aria-labelledby="player-info-dialog-title"
+      data-testid="player-info-dialog"
     >
       <DialogTitle id="player-info-dialog-title">{title}</DialogTitle>
       <DialogContent>
@@ -225,10 +228,14 @@ const PlayerInfoDialog = () => {
           onChange={handleNameChange}
           onBlur={handleNameBlur}
           value={playerInput.name}
-          error={playerValidation.name}
+          error={playerValidation.name > 0 ? true : false}
           helperText={playerValidation.name ? 'Name is required' : null}
+          inputProps={{ 'data-testid': 'player-info-name-input' }}
         />
-        <FormControl fullWidth error={playerValidation.country}>
+        <FormControl
+          fullWidth
+          error={playerValidation.country > 0 ? true : false}
+        >
           <InputLabel id="player-country-label">Country</InputLabel>
           <Select
             fullWidth
@@ -237,6 +244,7 @@ const PlayerInfoDialog = () => {
             onChange={handleCountryChange}
             onBlur={handleCountryBlur}
             value={playerInput.country}
+            inputProps={{ 'data-testid': 'player-info-country-input' }}
           >
             {Object.entries(COUNTRIES)
               .sort(sortEntriesAlphabeticallyAscending)
@@ -257,8 +265,9 @@ const PlayerInfoDialog = () => {
           onChange={handleWinningsChange}
           onBlur={handleWinningsBlur}
           value={playerInput.winnings}
-          error={playerValidation.winnings}
+          error={playerValidation.winnings > 0 ? true : false}
           helperText={playerValidation.winnings ? 'Winnings is required' : null}
+          inputProps={{ 'data-testid': 'player-info-winnings-input' }}
           fullWidth
         />
         <TextField
@@ -267,7 +276,7 @@ const PlayerInfoDialog = () => {
           onChange={handleImageUrlChange}
           onBlur={handleImageUrlBlur}
           value={playerInput.imageUrl}
-          error={playerValidation.imageUrl}
+          error={playerValidation.imageUrl > 0 ? true : false}
           helperText={
             playerValidation.imageUrl === 1
               ? 'Image URL is required'
@@ -276,6 +285,7 @@ const PlayerInfoDialog = () => {
               : null
           }
           fullWidth
+          inputProps={{ 'data-testid': 'player-info-image-url-input' }}
         />
       </DialogContent>
       <DialogActions>
@@ -290,6 +300,7 @@ const PlayerInfoDialog = () => {
             (bool, val) => (val > 0 ? true : bool),
             false
           )}
+          data-testid="player-info-dialog-submit-button"
         >
           {submitText}
         </Button>

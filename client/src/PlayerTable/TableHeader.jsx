@@ -53,6 +53,7 @@ const TableHeader = () => {
                 ) : undefined
               }
               onClick={() => sortPlayersBy(PLAYER_SORTABLE_FIELDS.name)}
+              data-testid="table-header-name-sort"
             >
               Player
             </Button>
@@ -66,6 +67,7 @@ const TableHeader = () => {
                 ) : undefined
               }
               onClick={() => sortPlayersBy(PLAYER_SORTABLE_FIELDS.winnings)}
+              data-testid="table-header-winnings-sort"
             >
               Winnings
             </Button>
@@ -79,6 +81,7 @@ const TableHeader = () => {
                 ) : undefined
               }
               onClick={() => sortPlayersBy(PLAYER_SORTABLE_FIELDS.country)}
+              data-testid="table-header-country-sort"
             >
               Native of
             </Button>
